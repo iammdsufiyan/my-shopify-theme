@@ -1,0 +1,178 @@
+
+
+{% assign card_background = product_item.metafields.custom.card_background %}
+
+<div
+  class="custom-product-card"
+  data-product-card
+  style="--product-card-bg: {{ card_background | default: '#ffffff' }};"
+>
+    
+
+  <!-- IMAGE AREA -->
+  <div class="custom-product-card__media">
+
+    <a href="{{ product_item.url }}" class="custom-product-card__image-link">
+
+      {% if product_item.featured_image != blank %}
+
+        <img
+          class="custom-product-card__image custom-product-card__image--primary"
+          src="{{ product_item.featured_image | image_url: width: 900 }}"
+          alt="{{ product_item.featured_image.alt | default: product_item.title | escape }}"
+          width="{{ product_item.featured_image.width }}"
+          height="{{ product_item.featured_image.height }}"
+          loading="lazy"
+        >
+
+      {% endif %}
+
+
+      {% if product_item.images.size > 1 %}
+
+        <img
+          class="custom-product-card__image custom-product-card__image--secondary"
+          src="{{ product_item.images[1] | image_url: width: 900 }}"
+          alt="{{ product_item.images[1].alt | default: product_item.title | escape }}"
+          width="{{ product_item.images[1].width }}"
+          height="{{ product_item.images[1].height }}"
+          loading="lazy"
+        >
+
+      {% endif %}
+
+    </a>
+
+
+    <!-- WISHLIST -->
+   <button
+  type="button"
+  class="custom-product-card__wishlist"
+  data-wishlist
+  aria-label="Add {{ product_item.title | escape }} to wishlist"
+  aria-pressed="false"
+>
+  <span class="custom-product-card__heart">♡</span>
+</button>
+
+  </div>
+
+
+  <!-- PRODUCT INFORMATION -->
+  <div class="custom-product-card__content">
+
+    <!-- TITLE -->
+    <h3 class="custom-product-card__title">
+      <a href="{{ product_item.url }}">
+        {{ product_item.title }}
+      </a>
+    </h3>
+
+
+    <!-- DESCRIPTION -->
+    {% if product_item.description != blank %}
+
+      <p class="custom-product-card__description">
+        {{ product_item.description | strip_html | truncate: 90 }}
+      </p>
+
+    {% endif %}
+
+
+    <!-- PACK HEADER -->
+    {% if product_item.has_only_default_variant == false %}
+
+      <div class="custom-product-card__pack-header">
+
+        <span>₹</span>
+
+        <span data-selected-variant-title>
+          {{ product_item.selected_or_first_available_variant.title }}
+        </span>
+
+      </div>
+
+
+      <!-- VARIANTS -->
+      <div
+        class="custom-product-card__variants"
+        data-variant-list
+      >
+
+        {% for variant in product_item.variants %}
+
+          <button
+            type="button"
+            class="
+              custom-product-card__variant
+              {% if variant.id == product_item.selected_or_first_available_variant.id %}
+                is-selected
+              {% endif %}
+            "
+            data-variant-id="{{ variant.id }}"
+            data-variant-title="{{ variant.title | escape }}"
+            data-variant-price="{{ variant.price }}"
+            {% unless variant.available %}
+              disabled
+            {% endunless %}
+          >
+            {{ variant.title }}
+          </button>
+
+        {% endfor %}
+
+      </div>
+
+    {% endif %}
+
+
+    <!-- PRICE -->
+    <div class="custom-product-card__price" data-product-price>
+
+      {{ product_item.selected_or_first_available_variant.price | money }}
+
+    </div>
+
+
+    <!-- QUICK ADD -->
+    <button
+      type="button"
+      class="custom-product-card__quick-add"
+      data-quick-add
+      data-variant-id="{{ product_item.selected_or_first_available_variant.id }}"
+      {% unless product_item.selected_or_first_available_variant.available %}
+        disabled
+      {% endunless %}
+    >
+
+      <span class="custom-product-card__cart-icon">
+        🛒
+      </span>
+
+      <span>
+        {% if product_item.selected_or_first_available_variant.available %}
+          Quick Add
+        {% else %}
+          Sold Out
+        {% endif %}
+      </span>
+
+    </button>
+
+
+    <!-- SECURE CHECKOUT -->
+    <div class="custom-product-card__security">
+
+      <span class="custom-product-card__security-icon">
+        ♧
+      </span>
+
+      <span>
+        Secure checkout • Bulk Order
+      </span>
+
+    </div>
+
+  </div>
+
+</div>

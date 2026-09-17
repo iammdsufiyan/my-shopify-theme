@@ -1,0 +1,44 @@
+<div class="custom-product-details">
+
+  {% if product.metafields.custom.ingredients != blank %}
+    <details>
+      <summary>
+        <span>Ingredients</span>
+        <span>+</span>
+      </summary>
+
+      <div class="custom-product-details__content">
+        {{ product.metafields.custom.ingredients | metafield_tag }}
+      </div>
+    </details>
+  {% endif %}
+
+
+  {% if product.metafields.custom.benefits != blank %}
+    <details>
+      <summary>
+        <span>Benefits</span>
+        <span>+</span>
+      </summary>
+
+      <div class="custom-product-details__content">
+        {{ product.metafields.custom.benefits | metafield_tag }}
+      </div>
+    </details>
+  {% endif %}
+
+
+  {% if product.metafields.custom.storage_shipping != blank %}
+    <details>
+      <summary>
+        <span>Storage & Shipping</span>
+        <span>+</span>
+      </summary>
+
+      <div class="custom-product-details__content">
+        {{ product.metafields.custom.storage_shipping | metafield_tag }}
+      </div>
+    </details>
+  {% endif %}
+
+</div>

@@ -1,0 +1,507 @@
+{{ 'section-contact-form.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+
+<div class="custom-contact-section section-{{ section.id }}-padding">
+
+  <div class="custom-contact-container">
+
+    <!-- Rainbow accent -->
+    <div class="custom-contact-stripe" aria-hidden="true"></div>
+
+
+    <!-- Header / Intro -->
+    <div class="custom-contact-header">
+
+      {% if section.settings.heading != blank %}
+        <h1>
+          {{ section.settings.heading }}
+        </h1>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <p>
+          {{ section.settings.description }}
+        </p>
+      {% endif %}
+
+    </div>
+
+
+    <!-- Main two-column area -->
+    <div class="custom-contact-layout">
+
+
+      <!-- LEFT: CONTACT FORM -->
+      <div class="custom-contact-form-card">
+
+        {% form 'contact', id: 'ContactForm', class: 'custom-contact-form' %}
+
+          {% if form.posted_successfully? %}
+            <div class="custom-contact-success" tabindex="-1" autofocus>
+              {% render 'icon-success' %}
+              <span>
+                {{ 'templates.contact.form.post_success' | t }}
+              </span>
+            </div>
+
+          {% elsif form.errors %}
+            <div class="custom-contact-error">
+
+              <h2 role="alert" tabindex="-1" autofocus>
+                {% render 'icon-error' %}
+                {{ 'templates.contact.form.error_heading' | t }}
+              </h2>
+
+              <ul role="list">
+                <li>
+                  <a href="#ContactForm-email">
+                    {{ form.errors.translated_fields.email | capitalize }}
+                    {{ form.errors.messages.email }}
+                  </a>
+                </li>
+              </ul>
+
+            </div>
+          {% endif %}
+
+
+          <!-- Name -->
+          <div class="custom-contact-field">
+
+            <label for="ContactForm-name">
+              Name
+            </label>
+
+            <input
+              type="text"
+              id="ContactForm-name"
+              name="contact[Name]"
+              value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+              autocomplete="name"
+              placeholder="Your name"
+            >
+
+          </div>
+
+
+          <!-- Email -->
+          <div class="custom-contact-field">
+
+            <label for="ContactForm-email">
+              Email <span>*</span>
+            </label>
+
+            <input
+              type="email"
+              id="ContactForm-email"
+              name="contact[email]"
+              value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+              autocomplete="email"
+              spellcheck="false"
+              autocapitalize="off"
+              required
+              placeholder="you@example.com"
+              {% if form.errors contains 'email' %}
+                aria-invalid="true"
+                aria-describedby="ContactForm-email-error"
+              {% endif %}
+            >
+
+            {% if form.errors contains 'email' %}
+              <small id="ContactForm-email-error">
+                {{ form.errors.translated_fields.email | capitalize }}
+                {{ form.errors.messages.email }}
+              </small>
+            {% endif %}
+
+          </div>
+
+
+          <!-- Order number -->
+          <div class="custom-contact-field">
+
+            <label for="ContactForm-order">
+              Order Number <span class="optional">(Optional)</span>
+            </label>
+
+            <input
+              type="text"
+              id="ContactForm-order"
+              name="contact[Order Number]"
+              autocomplete="off"
+              placeholder="e.g. #1001"
+            >
+
+          </div>
+
+
+          <!-- Message -->
+          <div class="custom-contact-field">
+
+            <label for="ContactForm-body">
+              Message
+            </label>
+
+            <textarea
+              id="ContactForm-body"
+              name="contact[Message]"
+              rows="7"
+              placeholder="How can we help?"
+            >{{ form.body }}</textarea>
+
+          </div>
+
+
+          <!-- Submit -->
+          <div class="custom-contact-button">
+
+            <button type="submit">
+              Send Message
+            </button>
+
+          </div>
+
+        {% endform %}
+
+      </div>
+
+
+      <!-- RIGHT: CONTACT INFORMATION -->
+      <aside class="custom-contact-info-card">
+
+        <div class="custom-contact-info">
+
+          <h2>
+            Get in touch
+          </h2>
+
+
+          {% if section.settings.email != blank %}
+            <div class="custom-contact-info-item">
+
+              <span class="custom-contact-info-label">
+                Email
+              </span>
+
+              <a href="mailto:{{ section.settings.email }}">
+                {{ section.settings.email }}
+              </a>
+
+            </div>
+          {% endif %}
+
+
+          {% if section.settings.phone != blank %}
+            <div class="custom-contact-info-item">
+
+              <span class="custom-contact-info-label">
+                Phone
+              </span>
+
+              <a href="tel:{{ section.settings.phone | remove: ' ' }}">
+                {{ section.settings.phone }}
+              </a>
+
+            </div>
+          {% endif %}
+
+
+          {% if section.settings.response_time != blank %}
+            <div class="custom-contact-info-item">
+
+              <span class="custom-contact-info-label">
+                Response time
+              </span>
+
+              <p>
+                {{ section.settings.response_time }}
+              </p>
+
+            </div>
+          {% endif %}
+
+
+          {% if section.settings.address != blank %}
+            <div class="custom-contact-info-item">
+
+              <span class="custom-contact-info-label">
+                Address
+              </span>
+
+              <p>
+                {{ section.settings.address }}
+              </p>
+
+            </div>
+          {% endif %}
+
+
+          <!-- Quick Answers -->
+          <div class="custom-contact-quick">
+
+            <h3>
+              Quick answers
+            </h3>
+
+
+            {% if section.settings.track_order_label != blank %}
+              <a href="{{ section.settings.track_order_link }}">
+                {{ section.settings.track_order_label }}
+                <span>→</span>
+              </a>
+            {% endif %}
+
+
+            {% if section.settings.returns_label != blank %}
+              <a href="{{ section.settings.returns_link }}">
+                {{ section.settings.returns_label }}
+                <span>→</span>
+              </a>
+            {% endif %}
+
+
+            {% if section.settings.faq_label != blank %}
+              <a href="{{ section.settings.faq_link }}">
+                {{ section.settings.faq_label }}
+                <span>→</span>
+              </a>
+            {% endif %}
+
+          </div>
+
+
+          <!-- Social -->
+          {% if section.settings.instagram_link != blank
+            or section.settings.facebook_link != blank
+            or section.settings.tiktok_link != blank %}
+
+            <div class="custom-contact-social">
+
+              <h3>
+                Follow us
+              </h3>
+
+              <div class="custom-contact-social-icons">
+
+                {% if section.settings.instagram_link != blank %}
+                  <a
+                    href="{{ section.settings.instagram_link }}"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Instagram"
+                  >
+                    Instagram
+                  </a>
+                {% endif %}
+
+
+                {% if section.settings.facebook_link != blank %}
+                  <a
+                    href="{{ section.settings.facebook_link }}"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Facebook"
+                  >
+                    Facebook
+                  </a>
+                {% endif %}
+
+
+                {% if section.settings.tiktok_link != blank %}
+                  <a
+                    href="{{ section.settings.tiktok_link }}"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="TikTok"
+                  >
+                    TikTok
+                  </a>
+                {% endif %}
+
+              </div>
+
+            </div>
+
+          {% endif %}
+
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+{% schema %}
+{
+  "name": "Contact form",
+
+  "tag": "section",
+
+  "class": "section",
+
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+
+  "settings": [
+
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "We're Here to Help"
+    },
+
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Have a question about your order, our products, or anything else? Send us a message and we'll get back to you."
+    },
+
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "hello@example.com"
+    },
+
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone"
+    },
+
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "Address"
+    },
+
+    {
+      "type": "text",
+      "id": "response_time",
+      "label": "Response time",
+      "default": "We typically reply within 24 hours."
+    },
+
+    {
+      "type": "header",
+      "content": "Quick answer links"
+    },
+
+    {
+      "type": "text",
+      "id": "track_order_label",
+      "label": "Track order label",
+      "default": "Track My Order"
+    },
+
+    {
+      "type": "url",
+      "id": "track_order_link",
+      "label": "Track order link"
+    },
+
+    {
+      "type": "text",
+      "id": "returns_label",
+      "label": "Returns label",
+      "default": "Shipping & Returns"
+    },
+
+    {
+      "type": "url",
+      "id": "returns_link",
+      "label": "Returns link"
+    },
+
+    {
+      "type": "text",
+      "id": "faq_label",
+      "label": "FAQ label",
+      "default": "FAQ"
+    },
+
+    {
+      "type": "url",
+      "id": "faq_link",
+      "label": "FAQ link"
+    },
+
+    {
+      "type": "header",
+      "content": "Social links"
+    },
+
+    {
+      "type": "url",
+      "id": "instagram_link",
+      "label": "Instagram"
+    },
+
+    {
+      "type": "url",
+      "id": "facebook_link",
+      "label": "Facebook"
+    },
+
+    {
+      "type": "url",
+      "id": "tiktok_link",
+      "label": "TikTok"
+    },
+
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+
+    {
+  "type": "range",
+  "id": "padding_top",
+  "min": 0,
+  "max": 100,
+  "step": 4,
+  "unit": "px",
+  "label": "Padding top",
+  "default": 24
+},
+{
+  "type": "range",
+  "id": "padding_bottom",
+  "min": 0,
+  "max": 100,
+  "step": 4,
+  "unit": "px",
+  "label": "Padding bottom",
+  "default": 60
+}
+
+  ],
+
+  "presets": [
+    {
+      "name": "Contact form"
+    }
+  ]
+}
+{% endschema %}

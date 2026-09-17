@@ -1,0 +1,246 @@
+<div class="about-us">
+
+  <div class="about-us__container">
+
+    {% for block in section.blocks %}
+
+      {% case block.type %}
+
+        {% when 'hero' %}
+          <div class="about-us__hero" {{ block.shopify_attributes }}>
+
+            {% if block.settings.heading != blank %}
+              <h1>{{ block.settings.heading }}</h1>
+            {% endif %}
+
+            {% if block.settings.text != blank %}
+              <div class="about-us__hero-text">
+                {{ block.settings.text }}
+              </div>
+            {% endif %}
+
+            {% if block.settings.image != blank %}
+              <div class="about-us__hero-image">
+                {{
+                  block.settings.image
+                  | image_url: width: 1400
+                  | image_tag:
+                    loading: 'lazy',
+                    alt: block.settings.heading
+                }}
+              </div>
+            {% endif %}
+
+          </div>
+
+
+        {% when 'story' %}
+          <div class="about-us__story" {{ block.shopify_attributes }}>
+
+            {% if block.settings.image != blank %}
+              <div class="about-us__story-image">
+                {{
+                  block.settings.image
+                  | image_url: width: 1000
+                  | image_tag:
+                    loading: 'lazy',
+                    alt: block.settings.heading
+                }}
+              </div>
+            {% endif %}
+
+            <div class="about-us__story-content">
+
+              {% if block.settings.heading != blank %}
+                <h2>{{ block.settings.heading }}</h2>
+              {% endif %}
+
+              {% if block.settings.text != blank %}
+                <div>
+                  {{ block.settings.text }}
+                </div>
+              {% endif %}
+
+            </div>
+
+          </div>
+
+
+        {% when 'value' %}
+          <div class="about-us__value" {{ block.shopify_attributes }}>
+
+            {% if block.settings.heading != blank %}
+              <h3>{{ block.settings.heading }}</h3>
+            {% endif %}
+
+            {% if block.settings.text != blank %}
+              <div>
+                {{ block.settings.text }}
+              </div>
+            {% endif %}
+
+          </div>
+
+
+        {% when 'cta' %}
+          <div class="about-us__cta" {{ block.shopify_attributes }}>
+
+            {% if block.settings.heading != blank %}
+              <h2>{{ block.settings.heading }}</h2>
+            {% endif %}
+
+            {% if block.settings.text != blank %}
+              <div>
+                {{ block.settings.text }}
+              </div>
+            {% endif %}
+
+            {% if block.settings.button_label != blank %}
+              <a
+                href="{{ block.settings.link }}"
+                class="about-us__cta-button"
+              >
+                {{ block.settings.button_label }}
+              </a>
+            {% endif %}
+
+          </div>
+
+      {% endcase %}
+
+    {% endfor %}
+
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "About Us",
+
+  "blocks": [
+    {
+      "type": "hero",
+      "name": "Hero",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "About Us"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Tell your customers about your brand.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+
+    {
+      "type": "story",
+      "name": "Our Story",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Our Story"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Content",
+          "default": "<p>Tell your customers how your brand started.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+
+    {
+      "type": "value",
+      "name": "Value",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Quality"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Description",
+          "default": "<p>Describe one of your brand values.</p>"
+        }
+      ]
+    },
+
+    {
+      "type": "cta",
+      "name": "Call to Action",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Shop Our Products"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Discover our collection.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "About Us",
+      "blocks": [
+        {
+          "type": "hero"
+        },
+        {
+          "type": "story"
+        },
+        {
+          "type": "value"
+        },
+        {
+          "type": "value"
+        },
+        {
+          "type": "value"
+        },
+        {
+          "type": "cta"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

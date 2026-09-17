@@ -1,0 +1,62 @@
+{% doc %}
+  @prompt
+    generate a marquee , which will contains free shipping and , all things like that , add image also of cart , or some thing like that
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-marquee-{{ ai_gen_id }} { display: block; width: {{ block.settings.desktop_width_percent }}%; max-width: 100%; overflow: hidden; background: {{ block.settings.background_color }}; color: {{ block.settings.text_color }}; border-top: {{ block.settings.border_thickness }}px solid {{ block.settings.border_color }}; border-bottom: {{ block.settings.border_thickness }}px solid {{ block.settings.border_color }}; }
+  .ai-marquee-{{ ai_gen_id }}__viewport { overflow: hidden; width: 100%; }
+  .ai-marquee-{{ ai_gen_id }}__track { display: flex; width: max-content; min-width: 100%; animation: ai-marquee-scroll-{{ ai_gen_id }} {{ block.settings.speed }}s linear infinite; will-change: transform; }
+  .ai-marquee-{{ ai_gen_id }}__group { display: flex; align-items: center; flex-shrink: 0; min-width: 100%; }
+  .ai-marquee-{{ ai_gen_id }}__item { display: inline-flex; align-items: center; gap: 14px; padding: {{ block.settings.vertical_padding }}px 28px; white-space: nowrap; font-size: {{ block.settings.text_size }}px; font-weight: 600; letter-spacing: 0.03em; }
+  .ai-marquee-{{ ai_gen_id }}__icon { width: {{ block.settings.icon_size }}px; height: {{ block.settings.icon_size }}px; object-fit: contain; flex: 0 0 auto; }
+  .ai-marquee-{{ ai_gen_id }}__fallback-icon { width: {{ block.settings.icon_size }}px; height: {{ block.settings.icon_size }}px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.25em; line-height: 1; }
+  .ai-marquee-{{ ai_gen_id }}__separator { color: {{ block.settings.separator_color }}; font-size: 1.15em; line-height: 1; }
+  .ai-marquee-{{ ai_gen_id }}:hover .ai-marquee-{{ ai_gen_id }}__track, .ai-marquee-{{ ai_gen_id }}:focus-within .ai-marquee-{{ ai_gen_id }}__track { animation-play-state: paused; }
+  @keyframes ai-marquee-scroll-{{ ai_gen_id }} { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .ai-marquee-{{ ai_gen_id }}__track { animation: none; transform: none; } }
+{% endstyle %}
+
+<aside class="ai-marquee-{{ ai_gen_id }}" role="region" aria-label="{{ block.settings.accessibility_label | escape }}" {{ block.shopify_attributes }}>
+  <div class="ai-marquee-{{ ai_gen_id }}__viewport">
+    <div class="ai-marquee-{{ ai_gen_id }}__track">
+      {% for copy in (1..2) %}
+        <div class="ai-marquee-{{ ai_gen_id }}__group" aria-hidden="{% if copy == 2 %}true{% else %}false{% endif %}">
+          {% if block.settings.message_one != blank %}<span class="ai-marquee-{{ ai_gen_id }}__item">{% if block.settings.icon_image %}<img class="ai-marquee-{{ ai_gen_id }}__icon" src="{{ block.settings.icon_image | image_url: width: 100 }}" alt="" loading="lazy" width="{{ block.settings.icon_size }}" height="{{ block.settings.icon_size }}">{% else %}<span class="ai-marquee-{{ ai_gen_id }}__fallback-icon" aria-hidden="true">🛒</span>{% endif %}{{ block.settings.message_one | escape }}<span class="ai-marquee-{{ ai_gen_id }}__separator" aria-hidden="true">✦</span></span>{% endif %}
+          {% if block.settings.message_two != blank %}<span class="ai-marquee-{{ ai_gen_id }}__item">{% if block.settings.icon_image %}<img class="ai-marquee-{{ ai_gen_id }}__icon" src="{{ block.settings.icon_image | image_url: width: 100 }}" alt="" loading="lazy" width="{{ block.settings.icon_size }}" height="{{ block.settings.icon_size }}">{% else %}<span class="ai-marquee-{{ ai_gen_id }}__fallback-icon" aria-hidden="true">🛍</span>{% endif %}{{ block.settings.message_two | escape }}<span class="ai-marquee-{{ ai_gen_id }}__separator" aria-hidden="true">✦</span></span>{% endif %}
+          {% if block.settings.message_three != blank %}<span class="ai-marquee-{{ ai_gen_id }}__item">{% if block.settings.icon_image %}<img class="ai-marquee-{{ ai_gen_id }}__icon" src="{{ block.settings.icon_image | image_url: width: 100 }}" alt="" loading="lazy" width="{{ block.settings.icon_size }}" height="{{ block.settings.icon_size }}">{% else %}<span class="ai-marquee-{{ ai_gen_id }}__fallback-icon" aria-hidden="true">✓</span>{% endif %}{{ block.settings.message_three | escape }}<span class="ai-marquee-{{ ai_gen_id }}__separator" aria-hidden="true">✦</span></span>{% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</aside>
+
+{% schema %}
+{
+  "name": "Announcement marquee",
+  "settings": [
+    { "type": "header", "content": "Messages" },
+    { "type": "text", "id": "message_one", "label": "Message one", "default": "Free shipping on orders over $50" },
+    { "type": "text", "id": "message_two", "label": "Message two", "default": "Easy returns within 30 days" },
+    { "type": "text", "id": "message_three", "label": "Message three", "default": "Secure checkout every time" },
+    { "type": "text", "id": "accessibility_label", "label": "Accessibility label", "default": "Store announcements" },
+    { "type": "image_picker", "id": "icon_image", "label": "Announcement icon" },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "speed", "label": "Scroll speed", "min": 10, "max": 60, "step": 5, "unit": "s", "default": 30 },
+    { "type": "range", "id": "text_size", "label": "Text size", "min": 12, "max": 24, "step": 1, "unit": "px", "default": 14 },
+    { "type": "range", "id": "icon_size", "label": "Icon size", "min": 12, "max": 32, "step": 2, "unit": "px", "default": 20 },
+    { "type": "range", "id": "vertical_padding", "label": "Vertical padding", "min": 8, "max": 28, "step": 2, "unit": "px", "default": 14 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#121212" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#FFFFFF" },
+    { "type": "color", "id": "separator_color", "label": "Separator", "default": "#45C0B6" },
+    { "type": "color", "id": "border_color", "label": "Border", "default": "#121212" },
+    { "type": "range", "id": "border_thickness", "label": "Border thickness", "min": 0, "max": 4, "step": 1, "unit": "px", "default": 0 }
+  ],
+  "presets": [{ "name": "Announcement marquee" }],
+  "tag": null,
+  "class": "announcement-marquee-block"
+}
+{% endschema %}

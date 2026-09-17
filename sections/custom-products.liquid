@@ -1,0 +1,46 @@
+<div class="custom-products">
+
+  {% if section.settings.collection != blank %}
+
+    <div class="custom-products__grid">
+
+      {% for product in section.settings.collection.products %}
+
+        {% render 'product-card',
+          product_item: product
+        %}
+
+      {% endfor %}
+
+    </div>
+
+  {% else %}
+
+    <p class="custom-products__empty">
+      Please select a collection.
+    </p>
+
+  {% endif %}
+
+</div>
+
+
+{% schema %}
+{
+  "name": "Custom Products",
+
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select collection"
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Custom Products"
+    }
+  ]
+}
+{% endschema %}

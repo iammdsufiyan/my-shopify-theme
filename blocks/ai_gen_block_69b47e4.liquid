@@ -1,0 +1,247 @@
+{% doc %}
+  @prompt
+    generate a marqueee
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-marquee-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    overflow: hidden;
+    background: {{ block.settings.background_color }};
+    color: {{ block.settings.text_color }};
+    border-radius: {{ block.settings.corner_radius }}px;
+  }
+
+  .ai-marquee-{{ ai_gen_id }}__viewport {
+    display: flex;
+    overflow: hidden;
+    min-height: {{ block.settings.height }}px;
+    align-items: center;
+  }
+
+  .ai-marquee-{{ ai_gen_id }}__track {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    min-width: max-content;
+    animation: ai-marquee-scroll-{{ ai_gen_id }} {{ block.settings.speed }}s linear infinite;
+  }
+
+  .ai-marquee-{{ ai_gen_id }}__group {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .ai-marquee-{{ ai_gen_id }}__item {
+    display: inline-flex;
+    align-items: center;
+    gap: {{ block.settings.item_gap }}px;
+    padding: 0 {{ block.settings.item_gap }}px;
+    font-family: {{ block.settings.font.family }};
+    font-size: {{ block.settings.text_size }}px;
+    font-weight: {{ block.settings.font.weight }};
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .ai-marquee-{{ ai_gen_id }}__separator {
+    color: {{ block.settings.separator_color }};
+    font-size: {{ block.settings.separator_size }}px;
+    line-height: 1;
+  }
+
+  .ai-marquee-{{ ai_gen_id }}:hover .ai-marquee-{{ ai_gen_id }}__track,
+  .ai-marquee-{{ ai_gen_id }}:focus-within .ai-marquee-{{ ai_gen_id }}__track {
+    animation-play-state: paused;
+  }
+
+  @keyframes ai-marquee-scroll-{{ ai_gen_id }} {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-marquee-{{ ai_gen_id }}__track {
+      animation: none;
+    }
+  }
+{% endstyle %}
+
+<marquee-banner-{{ ai_gen_id }}
+  class="ai-marquee-{{ ai_gen_id }}"
+  role="region"
+  aria-label="{{ block.settings.accessibility_label | escape }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-marquee-{{ ai_gen_id }}__viewport">
+    <div class="ai-marquee-{{ ai_gen_id }}__track">
+      {% for repeat in (1..2) %}
+        <div class="ai-marquee-{{ ai_gen_id }}__group" {% if repeat == 2 %}aria-hidden="true"{% endif %}>
+          {% for item in (1..4) %}
+            <span class="ai-marquee-{{ ai_gen_id }}__item">
+              <span>{{ block.settings.message }}</span>
+              <span class="ai-marquee-{{ ai_gen_id }}__separator" aria-hidden="true">{{ block.settings.separator }}</span>
+            </span>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</marquee-banner-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class MarqueeBanner{{ ai_gen_id }} extends HTMLElement {
+      connectedCallback() {
+        this.setAttribute('tabindex', '0');
+      }
+    }
+
+    if (!customElements.get('marquee-banner-{{ ai_gen_id }}')) {
+      customElements.define('marquee-banner-{{ ai_gen_id }}', MarqueeBanner{{ ai_gen_id }});
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Marquee",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "message",
+      "label": "Message",
+      "default": "Discover our latest collection"
+    },
+    {
+      "type": "text",
+      "id": "separator",
+      "label": "Separator",
+      "default": "✦"
+    },
+    {
+      "type": "text",
+      "id": "accessibility_label",
+      "label": "Accessibility label",
+      "default": "Scrolling announcement"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "label": "Height",
+      "min": 32,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "item_gap",
+      "label": "Item spacing",
+      "min": 8,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Speed",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "font_picker",
+      "id": "font",
+      "label": "Font",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "separator_size",
+      "label": "Separator size",
+      "min": 12,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "separator_color",
+      "label": "Separator",
+      "default": "#45C0B6"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee"
+    }
+  ],
+  "tag": null,
+  "class": "marquee-block"
+}
+{% endschema %}

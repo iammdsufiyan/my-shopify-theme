@@ -1,0 +1,468 @@
+/* =========================================================
+   PLAY WITH US - SPIN THE WHEEL
+   ========================================================= */
+
+.play-with-us {
+  width: 100%;
+  padding: 50px 20px 70px;
+  box-sizing: border-box;
+
+  background:
+    radial-gradient(
+      circle at 10% 15%,
+      rgba(239, 47, 118, 0.16),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(74, 161, 190, 0.16),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 75% 90%,
+      rgba(220, 201, 29, 0.16),
+      transparent 30%
+    ),
+    #FFF9F0;
+
+  color: #17202A;
+}
+
+.play-with-us__container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.play-with-us__header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.play-with-us__header h1 {
+  margin: 0 0 12px;
+
+  font-size: 46px;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.play-with-us__header p {
+  max-width: 650px;
+  margin: 0 auto;
+
+  color: #6B7280;
+
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   WHEEL AREA
+   ========================================================= */
+
+.play-with-us__wheel-area {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 40px 20px 25px;
+}
+
+
+/* =========================================================
+   POINTER
+   ========================================================= */
+
+.play-with-us__pointer {
+  position: absolute;
+
+  top: 2px;
+  left: 50%;
+
+  z-index: 10;
+
+  transform: translateX(-50%);
+
+  color: #EF2F76;
+
+  font-size: 34px;
+  line-height: 1;
+}
+
+
+/* =========================================================
+   WHEEL
+   ========================================================= */
+
+.play-with-us__wheel-wrapper {
+  position: relative;
+
+  width: 430px;
+  height: 430px;
+
+  max-width: 85vw;
+  max-height: 85vw;
+}
+
+.play-with-us__wheel {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  border: 8px solid #FFFFFF;
+
+  box-shadow:
+    0 20px 45px rgba(23, 32, 42, 0.16);
+
+  background:
+    conic-gradient(
+      #EF2F76 0deg 60deg,
+      #4AA1BE 60deg 120deg,
+      #DCC91D 120deg 180deg,
+      #7F9424 180deg 240deg,
+      #EF2F76 240deg 300deg,
+      #4AA1BE 300deg 360deg
+    );
+
+  transition:
+    transform 5s cubic-bezier(0.16, 1, 0.3, 1);
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   WHEEL SEGMENTS
+   ========================================================= */
+
+.play-with-us__segment {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 42%;
+  height: 42%;
+
+  margin-left: -21%;
+  margin-top: -21%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #FFFFFF;
+
+  text-align: center;
+
+  font-size: 14px;
+  font-weight: 800;
+
+  line-height: 1.15;
+
+  pointer-events: none;
+}
+
+
+/* Position text around the wheel */
+
+.segment-1 {
+  transform: rotate(30deg) translateY(-145px) rotate(-30deg);
+}
+
+.segment-2 {
+  transform: rotate(90deg) translateY(-145px) rotate(-90deg);
+}
+
+.segment-3 {
+  transform: rotate(150deg) translateY(-145px) rotate(-150deg);
+}
+
+.segment-4 {
+  transform: rotate(210deg) translateY(-145px) rotate(-210deg);
+}
+
+.segment-5 {
+  transform: rotate(270deg) translateY(-145px) rotate(-270deg);
+}
+
+.segment-6 {
+  transform: rotate(330deg) translateY(-145px) rotate(-330deg);
+}
+
+
+/* =========================================================
+   CENTER
+   ========================================================= */
+
+.play-with-us__wheel-center {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 90px;
+  height: 90px;
+
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #FFFFFF;
+  color: #EF2F76;
+
+  font-size: 18px;
+  font-weight: 800;
+
+  box-shadow:
+    0 6px 18px rgba(23, 32, 42, 0.15);
+
+  z-index: 5;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   SPIN BUTTON
+   ========================================================= */
+
+.play-with-us__controls {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 25px;
+}
+
+.play-with-us__spin-button {
+  min-width: 220px;
+  min-height: 58px;
+
+  padding: 0 28px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: #EF2F76;
+  color: #FFFFFF;
+
+  font-family: inherit;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 25px rgba(239, 47, 118, 0.22);
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.play-with-us__spin-button:hover {
+  background: #D92367;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 30px rgba(239, 47, 118, 0.28);
+}
+
+.play-with-us__spin-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+
+/* =========================================================
+   RESULT
+   ========================================================= */
+
+.play-with-us__result {
+  max-width: 600px;
+
+  margin: 25px auto 0;
+  padding: 18px 20px;
+
+  border-radius: 15px;
+
+  background: #FFFFFF;
+
+  box-shadow:
+    0 10px 25px rgba(23, 32, 42, 0.07);
+
+  color: #17202A;
+
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 700;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+.play-with-us__reset-button {
+  display: none;
+
+  margin: 15px auto 0;
+
+  min-height: 46px;
+
+  padding: 0 22px;
+
+  border: 1px solid #D9DDE3;
+  border-radius: 12px;
+
+  background: #FFFFFF;
+  color: #17202A;
+
+  font-family: inherit;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.play-with-us__reset-button.is-visible {
+  display: block;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media screen and (max-width: 749px) {
+
+  .play-with-us {
+    padding: 35px 14px 50px;
+  }
+
+  .play-with-us__header h1 {
+    font-size: 36px;
+  }
+
+  .play-with-us__header p {
+    font-size: 16px;
+  }
+
+  .play-with-us__wheel-area {
+    padding: 35px 10px 20px;
+  }
+
+  .play-with-us__wheel-wrapper {
+    width: 330px;
+    height: 330px;
+  }
+
+  .play-with-us__segment {
+    font-size: 11px;
+  }
+
+  .segment-1,
+  .segment-2,
+  .segment-3,
+  .segment-4,
+  .segment-5,
+  .segment-6 {
+    transform-origin: center;
+  }
+
+  .segment-1 {
+    transform: rotate(30deg) translateY(-110px) rotate(-30deg);
+  }
+
+  .segment-2 {
+    transform: rotate(90deg) translateY(-110px) rotate(-90deg);
+  }
+
+  .segment-3 {
+    transform: rotate(150deg) translateY(-110px) rotate(-150deg);
+  }
+
+  .segment-4 {
+    transform: rotate(210deg) translateY(-110px) rotate(-210deg);
+  }
+
+  .segment-5 {
+    transform: rotate(270deg) translateY(-110px) rotate(-270deg);
+  }
+
+  .segment-6 {
+    transform: rotate(330deg) translateY(-110px) rotate(-330deg);
+  }
+
+  .play-with-us__wheel-center {
+    width: 72px;
+    height: 72px;
+
+    font-size: 15px;
+  }
+
+  .play-with-us__pointer {
+    font-size: 28px;
+  }
+
+  .play-with-us__spin-button {
+    width: 100%;
+  }
+}
+
+
+.play-with-us__apply {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 14px;
+
+  min-height: 48px;
+
+  padding: 0 22px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #EF2F76;
+  color: #FFFFFF;
+
+  font-family: inherit;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.play-with-us__apply:hover {
+  background: #D92367;
+}

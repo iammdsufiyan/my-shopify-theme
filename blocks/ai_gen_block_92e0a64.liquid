@@ -1,0 +1,112 @@
+{% doc %}
+  @prompt
+    That's a thin horizontal accent stripe divided into seven equal segments, each filled with a different solid color (red, orange, yellow, green, blue, purple, pink) placed side by side — essentially a simplified rainbow gradient made of flat color blocks rather than a smooth blend, sitting right at the top edge of the footer.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-rainbow-stripe-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    height: {{ block.settings.stripe_height }}px;
+    overflow: hidden;
+  }
+
+  .ai-rainbow-stripe-{{ ai_gen_id }}__segments {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    width: 100%;
+    height: 100%;
+  }
+
+  .ai-rainbow-stripe-{{ ai_gen_id }}__segment {
+    height: 100%;
+  }
+
+  .ai-rainbow-stripe-{{ ai_gen_id }}__segment--red {
+    background-color: #e53935;
+  }
+
+  .ai-rainbow-stripe-{{ ai_gen_id }}__segment--orange {
+    background-color: #f57c00;
+  }
+
+  .ai-rainbow-stripe-{{ ai_gen_id }}__segment--yellow {
+    background-color: #fdd835;
+  }
+
+  .ai-rainbow-stripe-{{ ai_gen_id }}__segment--green {
+    background-color: #43a047;
+  }
+
+  .ai-rainbow-stripe-{{ ai_gen_id }}__segment--blue {
+    background-color: #1e88e5;
+  }
+
+  .ai-rainbow-stripe-{{ ai_gen_id }}__segment--purple {
+    background-color: #8e24aa;
+  }
+
+  .ai-rainbow-stripe-{{ ai_gen_id }}__segment--pink {
+    background-color: #d81b60;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-rainbow-stripe-{{ ai_gen_id }} {
+      width: 100%;
+    }
+  }
+{% endstyle %}
+
+<div
+  class="ai-rainbow-stripe-{{ ai_gen_id }}"
+  role="img"
+  aria-label="Decorative seven-color accent stripe"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-rainbow-stripe-{{ ai_gen_id }}__segments" aria-hidden="true">
+    <span class="ai-rainbow-stripe-{{ ai_gen_id }}__segment ai-rainbow-stripe-{{ ai_gen_id }}__segment--red"></span>
+    <span class="ai-rainbow-stripe-{{ ai_gen_id }}__segment ai-rainbow-stripe-{{ ai_gen_id }}__segment--orange"></span>
+    <span class="ai-rainbow-stripe-{{ ai_gen_id }}__segment ai-rainbow-stripe-{{ ai_gen_id }}__segment--yellow"></span>
+    <span class="ai-rainbow-stripe-{{ ai_gen_id }}__segment ai-rainbow-stripe-{{ ai_gen_id }}__segment--green"></span>
+    <span class="ai-rainbow-stripe-{{ ai_gen_id }}__segment ai-rainbow-stripe-{{ ai_gen_id }}__segment--blue"></span>
+    <span class="ai-rainbow-stripe-{{ ai_gen_id }}__segment ai-rainbow-stripe-{{ ai_gen_id }}__segment--purple"></span>
+    <span class="ai-rainbow-stripe-{{ ai_gen_id }}__segment ai-rainbow-stripe-{{ ai_gen_id }}__segment--pink"></span>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Rainbow accent stripe",
+  "settings": [
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "stripe_height",
+      "label": "Stripe height",
+      "min": 2,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rainbow accent stripe"
+    }
+  ],
+  "tag": null,
+  "class": "rainbow-accent-stripe-block"
+}
+{% endschema %}

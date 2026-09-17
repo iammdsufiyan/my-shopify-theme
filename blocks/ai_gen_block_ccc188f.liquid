@@ -1,0 +1,68 @@
+{% doc %}
+  @prompt
+    Create a custom Shopify Liquid section called "Announcement Marquee" for my Shopify theme.
+    
+    Requirements:
+    - Build it as a reusable section file: sections/announcement-marquee.liquid
+    - Create a smooth, continuously scrolling horizontal marquee from right to left.
+    - The animation must loop seamlessly with no visible jump or blank space.
+    - Show multiple announcement items in one continuous row, for example:
+      "FREE SHIPPING ON ORDERS OVER $50"
+      "NEW ARRIVALS"
+      "SHOP NOW"
+      "LIMITED TIME OFFER"
+    - Add Theme Editor settings for:
+      - Announcement text
+      - Background color
+      - Text color
+      - Font size
+      - Font weight
+      - Scrolling speed
+      - Direction (left/right)
+      - Space between announcements
+      - Section padding
+    - Allow merchants to add, remove, and reorder announcement items using Shopify blocks.
+    - Make the section fully responsive for desktop, tablet, and mobile.
+    - Use only Liquid, HTML, and CSS inside the section. Use minimal JavaScript only if absolutely necessary.
+    - Pause the animation when the user hovers over it.
+    - Make each announcement optionally clickable with a URL.
+    - Use accessible markup and prevent text from being cut off.
+    - Respect Shopify theme best practices and use {{ block.shopify_attributes }} for blocks.
+    - Include a complete {% schema %} with a preset so the section can be added from the Theme Editor.
+    - Do not modify or depend on existing theme sections.
+    - Keep all CSS scoped to this section so it does not affect other parts of the Shopify store.
+    - Make the design clean, modern, and suitable for a colorful DTC brand.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% style %}
+  .ai-announcement-marquee-{{ ai_gen_id }} { display:block; width:100%; background:{{ block.settings.background_color }}; color:{{ block.settings.text_color }}; overflow:hidden; }
+  .ai-announcement-marquee-{{ ai_gen_id }}__viewport { width:{{ block.settings.desktop_width_percent }}%; max-width:100%; margin:0 auto; overflow:hidden; padding:{{ block.settings.section_padding }}px 0; }
+  .ai-announcement-marquee-{{ ai_gen_id }}__track { display:flex; width:max-content; animation:ai-announcement-marquee-scroll-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite; }
+  .ai-announcement-marquee-{{ ai_gen_id }}__group { display:flex; align-items:center; flex-shrink:0; gap:{{ block.settings.item_spacing }}px; padding-right:{{ block.settings.item_spacing }}px; }
+  .ai-announcement-marquee-{{ ai_gen_id }}__item { color:{{ block.settings.text_color }}; font-family:{{ block.settings.font.family }},sans-serif; font-size:{{ block.settings.font_size }}px; font-weight:{{ block.settings.font_weight }}; line-height:1.25; letter-spacing:.06em; white-space:nowrap; text-decoration:none; }
+  .ai-announcement-marquee-{{ ai_gen_id }}__item:hover,.ai-announcement-marquee-{{ ai_gen_id }}__item:focus-visible { text-decoration:underline; text-underline-offset:3px; }
+  .ai-announcement-marquee-{{ ai_gen_id }}__separator { width:6px; height:6px; flex:0 0 auto; border-radius:50%; background:{{ block.settings.text_color }}; opacity:.7; }
+  .ai-announcement-marquee-{{ ai_gen_id }}:hover .ai-announcement-marquee-{{ ai_gen_id }}__track,.ai-announcement-marquee-{{ ai_gen_id }}:focus-within .ai-announcement-marquee-{{ ai_gen_id }}__track { animation-play-state:paused; }
+  @keyframes ai-announcement-marquee-scroll-{{ ai_gen_id }} { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+  .ai-announcement-marquee-{{ ai_gen_id }}--right .ai-announcement-marquee-{{ ai_gen_id }}__track { animation-direction:reverse; }
+  @media screen and (max-width:749px) { .ai-announcement-marquee-{{ ai_gen_id }}__viewport { width:100%; padding:{{ block.settings.section_padding | times: 0.8 }}px 0; } .ai-announcement-marquee-{{ ai_gen_id }}__item { font-size:{{ block.settings.font_size | times: 0.9 }}px; } }
+  @media (prefers-reduced-motion:reduce) { .ai-announcement-marquee-{{ ai_gen_id }}__track { animation-play-state:paused; } }
+{% endstyle %}
+<announcement-marquee-{{ ai_gen_id }} class="ai-announcement-marquee-{{ ai_gen_id }}{% if block.settings.direction == 'right' %} ai-announcement-marquee-{{ ai_gen_id }}--right{% endif %}" {{ block.shopify_attributes }}>
+  <div class="ai-announcement-marquee-{{ ai_gen_id }}__viewport" role="region" aria-label="Announcements">
+    <div class="ai-announcement-marquee-{{ ai_gen_id }}__track">
+      {% for copy in (1..2) %}
+        <div class="ai-announcement-marquee-{{ ai_gen_id }}__group"{% if copy == 2 %} aria-hidden="true"{% endif %}>
+          {% assign announcements = block.settings.announcements | newline_to_br | split: '<br />' %}
+          {% for announcement in announcements %}
+            {% assign announcement = announcement | strip %}
+            {% if announcement != blank %}<span class="ai-announcement-marquee-{{ ai_gen_id }}__item">{{ announcement | escape }}</span>{% unless forloop.last %}<span class="ai-announcement-marquee-{{ ai_gen_id }}__separator" aria-hidden="true"></span>{% endunless %}{% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</announcement-marquee-{{ ai_gen_id }}>
+{% schema %}
+{"name":"Announcement marquee","tag":null,"class":"announcement-marquee-block","settings":[{"type":"textarea","id":"announcements","label":"Announcement text","default":"Free shipping on orders over $50\nNew arrivals\nShop now\nLimited time offer"},{"type":"range","id":"desktop_width_percent","label":"Desktop width","min":50,"max":100,"step":5,"unit":"%","default":100},{"type":"color","id":"background_color","label":"Background","default":"#45C0B6"},{"type":"color","id":"text_color","label":"Text","default":"#121212"},{"type":"font_picker","id":"font","label":"Font","default":"helvetica_n4"},{"type":"range","id":"font_size","label":"Font size","min":10,"max":30,"step":1,"unit":"px","default":14},{"type":"select","id":"font_weight","label":"Font weight","options":[{"value":"400","label":"Regular"},{"value":"500","label":"Medium"},{"value":"700","label":"Bold"}],"default":"700"},{"type":"range","id":"scroll_speed","label":"Scrolling speed","min":10,"max":120,"step":5,"unit":"s","default":35},{"type":"select","id":"direction","label":"Direction","options":[{"value":"left","label":"Left"},{"value":"right","label":"Right"}],"default":"left"},{"type":"range","id":"item_spacing","label":"Space between announcements","min":16,"max":120,"step":8,"unit":"px","default":48},{"type":"range","id":"section_padding","label":"Section padding","min":4,"max":40,"step":4,"unit":"px","default":12}],"presets":[{"name":"Announcement marquee"}]}
+{% endschema %}
